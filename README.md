@@ -1,1 +1,1 @@
-# product-analytics
+# Product Analytics
