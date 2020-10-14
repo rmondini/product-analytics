@@ -28,8 +28,24 @@ assigned to users? Can a missing value indicate that that user discovered the ap
 
 ## Measurement of key business metrics
 
-We move on to the tracking and measurement of key metrics to extract actionable insights and drive product growth.
+We move on to the tracking and measurement of key business metrics to extract actionable insights and drive product growth.
 
 ### Daily Active Users
 
-Daily active users (DAU) is a key metric to track and measure to understand how a product/app is used. I determined the number of daily active users for each day in February 2016, where a user is considered active if they had at least one ping on that day. I decided to plot both the total DAUs and the breakdown of registered DAUs (numeric `uid`) vs device DAUs (alpha-numeric `uid`). The obtained plot is the following:
+Daily active users (DAU) is a key metric to track to understand how a product/app is used. I determined the number of daily active users for each day in February 2016 (a user is considered active if they had at least one ping that day). I decided to plot both the total DAUs and the breakdown of registered DAUs (numeric `uid`) vs device DAUs (alpha-numeric `uid`). The obtained plot is the following:
+
+![alt_text](https://github.com/rmondini/product-analytics/blob/main/plots/DAU_plot.jpg?raw=true)
+
+We observe a very distinct weekly pattern: the number of DAUs stays constant Monday-Thursday, considerably drops on Friday and Saturday to reach the weekly minimum, and finally starts picking up again on Sunday. In addition to this weekly pattern, we observe an overall increasing trend over the month. For instance, using DAUs on Saturdays as a reference, the total DAUs on Feb 6th, 13th, 20th, and 27th are respectively 94807, 97788 (+2981), 104665 (+6877), and 112789 (+8124), which indicates an overall positive trend growing faster than linearly. These weekly and overall patterns are followed by both the registered DAU and device DAU lines. This analysis prompts us to investigate why the number of active users drops every Friday and Saturday. Is this an organic effect or are there other contributing factors? For instance, if the app is a work-related product (e.g. a productivity or project management app), reduced usage on Fridays compared to previous weekdays and greater reduced usage on Saturdays might just be a natural consequence of fewer people opening the app for work as the weekend begins. Along the same lines, a slightly increasing number of DAUs on Sundays might be explained as a number of people resuming job-related activities as the new work week approaches. In addition, if the app is used by people in different time zones and all timestamps are converted into a reference time zone (e.g. Pacific Time), it is certainly expected to observe these "weekend effects" spread out across Friday-Sunday instead of being strictly limited to Saturday and Sunday (e.g. Friday afternoon on the US West Coast corresponds to Friday night in Central Europe and Saturday in Asia, while Sunday afternoon on the West Coast corresponds to Monday morning in Asia).
+
+We should also consider analyzing why we observe an overall positive trend over the month. Can this trend be explained solely by looking at the context in which people use the app or is it the result of more successful marketing and advertising campaigns over time? It could be useful to compare this positive trend with DAU plots from February of previous years and other months of the year.
+
+Finally, the plot shows that the majority of DAUs are registered users. The percentage
+of registered DAUs slightly increases over the month (80.1% on Feb 1st, 81.4% on Feb 15th,
+and 81.8% on Feb 29th). It would be interesting to understand what causes this increase
+and discuss strategies to further drive conversion of unregistered DAUs (device DAUs) into
+registered users.
+
+
+
+
