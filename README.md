@@ -13,7 +13,7 @@ The dataset `ping_dataset.json` consists of approximately 4.8 million observatio
 - `isFirst`: `True` if that ping represents the first ping associated to that `uid` (for some users the first ping happened before February 2016)
 - `utmSource`: traffic source that sent the user to the app.
 
-## Data Exploration & Wrangling
+## Data Wrangling & Exploration
 
 Real-world datasets are messy and require extensive exploration, cleaning, and wrangling before any meaningful analysis can be carried out. In `Product_Analytics.ipynb` I used Pandas to load the dataset and perform the preliminary data exploration and wrangling (see the notebook for details). Here I list a few observations that emerged from these initial phases of the analysis:
 - The dataset contains around 13,000 duplicate rows (corresponding to around 0.26% of the total number of rows). I dropped the duplicates by keeping only the first entry of each repeated row.
@@ -72,7 +72,21 @@ Also in this case, `tapjoy` redirects to the app the best users, who had a media
 
 ## Time Series Forecasting: Daily Active Users
 
+After tracking and measuring key metrics to understand historical and current product-user engagement, it is important to predict the future behavior of the metrics to obtain product growth projections. This type of analysis, especially when combined with additional data, has many purposes, such as validating and evaluating current marketing and advertising strategies, informing future campaigns, helping build the product development roadmap, etc. For this project I decided to focus on daily active users, one of the metrics measured earlier, and built a forecasting model to predict the number of DAUs beyond February 2016. From the previous analysis, I know that the DAU series consists of an overall positive trend and a weekly pattern (seasonality). This led to consider SARIMA models, since this class of time series forecasting models can handle seasonality effects. I will now briefly illustrate and compare the two SARIMA models I built, referring to the `Product_Analytics.ipynb` notebook for all the code.
 
+I first built and trained a SARIMA model on the DAU series obtained earlier. I performed stepwise search to find the best-performing set of hyperparameters (p,d,q)(P,D,Q) according to a chosen measure (in this case AIC). I set the seasonality order `m` to `m=7`, since the DAU series is daily and the seasonality effect is weekly. The best model turned out to be ARIMA(1,0,2)(1,0,1). I then built a second SARIMA model using a decomposition-based approach. In this case I first decomposed the DAU series multiplicatively into trend, seasonality, and residual components. I then built SARIMA models for each component separately (again using stepwise search for parameter optimization), forecasted each component, and finally multiplied back the obtained predictions to recover the original DAU series. In order to validate and compare the two models ("global" SARIMA and decomposition-based SARIMA), I decided to generate in-sample predictions (model predictions for the observations in the training set) and compare the respective RMSE. While this is only a partial validation, I decided to do this since the size of the training set is extremely limited (29 observations), and therefore using a subset of it for validation would further critically reduce the amount of data on which the model is trained and drastically worsen the model performance. In the presence of additional daily data, it would be possible to split the data into training and validation sets and perform thorough model validation. The following plot shows the observed DAU series along with the in-sample predictions from the two models: 
 
+<img src="https://github.com/rmondini/product-analytics/blob/main/plots/DAU_FC_In_Sample.png" width="480">
 
+Both models perform quite well, with accurate in-sample predictions after the first seasonal cycle (as it could be expected). Overall, the decomposition-based model seems to be performing better. The obtained RMSE for the in-sample predictions are:
 
+|                     | RMSE   |
+|---------------------|--------|
+| Global              | 3548.2 |
+| Decomposition-Based | 1849.3 |
+
+This quantitatively substantiates the observation that the decomposition-based model has higher accuracy than the "global" model. The final step is to use the models to forecast DAUs beyond February 2016. Given the limited dataset, I decided to obtain 14-day projections. The forecasts from both models are shown in the following plot:
+
+<img src="https://github.com/rmondini/product-analytics/blob/main/plots/DAU_FC.png" width="480">
+
+The shaded bands represent the 95% confidence intervals. As we can see, the forecasts from the two models are quite close to each other and well within the confidence intervals. Focusing on the decomposition-based model, which had lower RMSE for the in-sample predictions, the projected number of DAUs on March 7th is 148,755 and on March 14th is 158,161, which correspond respectively to a 7.3% and 6.3% weekly increase compared to a 6.6% increase between February 22nd and 29th. This shows a rather steady growth in the number of daily active users over the considered 14-day window. In the presence of additional historical data spanning over the course of many months, it would certainly be interesting to apply the same type of analysis to monthly active users to generate more long-term projections about user engagement with the app and its growth.
