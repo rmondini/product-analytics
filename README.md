@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The goal of this project is to perform product analytics using a real-world dataset (with a size of about 4.8 million data points). I will track and measure relevant business metrics, perform time series analysis and forecasting, extract actionable insights from the data, and make data-backed recommendations to drive product growth. The code is written in Python and contained in the Jupyter notebook called `Product_Analytics.ipynb`.
+The goal of this project is to perform product analytics using a real-world dataset (with a size of about 4.8 million data points). I will track and measure key business metrics, analyze traffic sources, and build forecasting models to extract actionable insights from the data and drive product growth. The code is written in Python and contained in the Jupyter notebook called `Product_Analytics.ipynb`.
 
 ## Dataset
 
